@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ceiba.biblioteca.models.Prestamo;
@@ -12,11 +13,16 @@ import com.ceiba.biblioteca.repositories.PrestamoDAO;
 @Service
 public class PrestamoServicio 
 {
+    private static PrestamoDAO prestamoDAO;
+
+    @Autowired
+    public PrestamoServicio(PrestamoDAO as_prestamoDAO) {
+        prestamoDAO = as_prestamoDAO;
+    }
+
     public static Prestamo crearPrestamo(Prestamo prestamo) throws Exception
     {
         Prestamo ls_resturn = new Prestamo();
-        PrestamoDAO prestamoDAO = new PrestamoDAO(null);
-
         try
         {
             
@@ -126,6 +132,17 @@ public class PrestamoServicio
         return ls_resturn;
     }
 
+    public static Prestamo obtenerPrestamoPorId(Long idPrestamo) throws Exception
+    {
+        Prestamo ls_return = new Prestamo();
+
+        ls_return = prestamoDAO.obtenerPrestamoPorId(idPrestamo);
+
+
+
+        return ls_return;
+
+    }
     public static LocalDate retirarFinesDeSemana(LocalDate date, int days) {
         LocalDate ls_return = date;
         int diasFinal = 0;

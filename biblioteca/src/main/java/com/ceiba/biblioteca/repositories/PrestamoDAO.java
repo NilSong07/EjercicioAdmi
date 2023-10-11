@@ -6,10 +6,7 @@ import java.sql.Statement;
 import java.sql.Types;
 
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,36 +25,41 @@ public class PrestamoDAO
         this.prestamoRepository = prestamoRepository;
     }
 
+
     public int contadorPrestamos(Long identificacionUsuario) throws SQLException {
 
-        PreparedStatement preparedStatement = null;
         int contadorReturn = 0;
 
-        /*try (Connection connection = dataSource.getConnection()) 
+        try 
         {
-            
-            preparedStatement = connection.prepareStatement(CONSULTA_CONTADOR_PRESTAMOS);
-
-            preparedStatement.setLong(1, identificacionUsuario);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) 
-                contadorReturn = resultSet.getInt(1);
-
+            contadorReturn = prestamoRepository.countByIdUsuarioEquals(identificacionUsuario);
         } 
-        catch (SQLException e) 
+        catch (Exception e) 
         {
             System.out.println("contadorPrestamos: " + e.getMessage());
             e.printStackTrace();
             throw e;
         }
-        finally
-        {
-            close(preparedStatement);
-        }*/
         return contadorReturn;
     }
+
+    public Prestamo obtenerPrestamoPorId(Long identificacionUsuario) throws SQLException 
+    {
+        Prestamo contadorReturn = new Prestamo();
+
+        try 
+        {
+            contadorReturn = prestamoRepository.buscarPorUsuario(identificacionUsuario);
+        } 
+        catch (Exception e) 
+        {
+            System.out.println("contadorPrestamos: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+        return contadorReturn;
+    }
+
 
 
     public int insertarPrestamo(Prestamo prestamista, String fechaPrestamo) throws SQLException {
